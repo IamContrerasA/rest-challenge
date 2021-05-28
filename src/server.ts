@@ -28,7 +28,15 @@ app.use(cors())
 app.post('/signup', signup)
 app.post('/signin', signin)
 
-app.use('/', protect)
+// Protected routes
+app.put('/accounts/:id', protect)
+app.delete('/accounts/:id', protect)
+app.post('/posts', protect)
+app.put('/posts/:id', protect)
+app.delete('/posts/:id', protect)
+app.post('posts/:id/comments', protect)
+app.put('posts/:id/comments/:id', protect)
+app.delete('posts/:id/comments/:id', protect)
 
 app.get('/api/v1/status', (req: Request, res: Response) => {
   res.json({ time: new Date() })
