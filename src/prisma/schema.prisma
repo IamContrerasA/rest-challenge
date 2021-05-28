@@ -1,0 +1,46 @@
+// This is your Prisma schema file,
+// learn more about it in the docs: https://pris.ly/d/prisma-schema
+
+datasource db {
+  provider = "postgresql"
+  url      = "postgresql://postgres:RAVN@localhost:5432/restchallenge?schema=public"
+}
+
+generator client {
+  provider = "prisma-client-js"
+}
+
+model Comment {
+  id        Int      @id @default(autoincrement())
+  createdAt DateTime @default(now()) @db.Timestamp(6)
+  content   String
+  published Boolean  @default(false)
+  liked     Boolean  @default(false)
+  authorId  Int
+  postId    Int
+  User      User     @relation(fields: [authorId], references: [id])
+  Post      Post     @relation(fields: [postId], references: [id])
+  
+}
+
+model Post {
+  id        Int      @id @default(autoincrement())
+  title     String   @db.VarChar(255)
+  createdAt DateTime @default(now()) @db.Timestamp(6)
+  content   String?
+  published Boolean  @default(false)
+  liked     Boolean  @default(false)
+  authorId  Int
+  Comment   Comment[]
+  User      User     @relation(fields: [authorId], references: [id])
+}
+
+model User {
+  id        Int      @id @default(autoincrement())
+  firstname String?  @db.VarChar(255)
+  surname   String?  @db.VarChar(255)
+  role      Int      @default(1)
+  email     String   @unique @db.VarChar(255)
+  Post      Post[]
+  Comment   Comment[]
+}
