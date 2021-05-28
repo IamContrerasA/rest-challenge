@@ -1,6 +1,7 @@
 import express, { Request, Response, NextFunction } from 'express'
 import cors from 'cors'
 import { apiRouter } from './router'
+import { protect, signin, signup } from './utils/auth'
 
 const app = express()
 const PORT = process.env.API_PORT || 3000
@@ -23,6 +24,11 @@ function errorHandler(
 }
 
 app.use(cors())
+
+app.post('/signup', signup)
+app.post('/signin', signin)
+
+app.use('/', protect)
 
 app.get('/api/v1/status', (req: Request, res: Response) => {
   res.json({ time: new Date() })
