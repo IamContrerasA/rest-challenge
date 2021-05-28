@@ -41,6 +41,7 @@ model User {
   surname   String?  @db.VarChar(255)
   role      Int      @default(1)
   email     String   @unique @db.VarChar(255)
+  password  String   @default("")
   Post      Post[]
   Comment   Comment[]
 }
