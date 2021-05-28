@@ -1,6 +1,5 @@
 import express, { Router } from 'express'
 import {
-  createUser,
   findUsers,
   findUser,
   updateUser,
@@ -10,7 +9,6 @@ import {
 const router = express.Router()
 
 export function userRoutes(): Router {
-  router.route('/').post(createUser)
   router.route('/').get(findUsers)
   router.route('/:id').get(findUser)
   router.route('/:id').put(updateUser)
