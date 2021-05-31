@@ -70,3 +70,25 @@ export async function deletePost(req: Request, res: Response): Promise<void> {
     throw new Error(`Couldn't find User with id = '${req.params.id}'`)
   }
 }
+
+export async function publishPost(req: Request, res: Response): Promise<void> {
+  const { user } = req.body
+
+  const existPost = await prisma.post.findUnique({
+    where: { id: parseInt(req.params.id) },
+  })
+
+  if (user.id !== existPost?.authorId) {
+    res.status(200).json({ error: `author id is not the current user` })
+    return
+  }
+  try {
+    const post = await prisma.post.update({
+      where: { id: parseInt(req.params.id) },
+      data: { published: true },
+    })
+    res.status(200).json({ post: post })
+  } catch (error) {
+    throw new Error(`Couldn't find post with id = '${req.params.id}'`)
+  }
+}

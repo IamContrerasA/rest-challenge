@@ -5,6 +5,7 @@ import {
   findPost,
   updatePost,
   deletePost,
+  publishPost,
 } from '../controllers/posts.controller'
 
 const router = express.Router()
@@ -15,6 +16,7 @@ export function postRoutes(): Router {
   router.route('/:id').get(findPost)
   router.route('/:id').put(updatePost)
   router.route('/:id').delete(deletePost)
+  router.route('/:id/publish').put(publishPost)
 
   return router
 }
