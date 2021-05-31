@@ -28,7 +28,7 @@ export async function findPost(req: Request, res: Response): Promise<void> {
 }
 
 export async function updatePost(req: Request, res: Response): Promise<void> {
-  errorPostUserIdDiff(req, res)
+  await errorPostUserIdDiff(req, res)
   const postBody = { ...req.body }
   delete postBody.user
 
@@ -44,20 +44,20 @@ export async function updatePost(req: Request, res: Response): Promise<void> {
 }
 
 export async function deletePost(req: Request, res: Response): Promise<void> {
-  errorPostUserIdDiff(req, res)
+  await errorPostUserIdDiff(req, res)
   try {
-    const user = await prisma.post.delete({
+    const post = await prisma.post.delete({
       where: { id: parseInt(req.params.id) },
     })
 
-    res.status(200).json({ user: user })
+    res.status(200).json({ post: post })
   } catch (error) {
     throw new Error(`Couldn't find post with id = '${req.params.id}'`)
   }
 }
 
 export async function publishPost(req: Request, res: Response): Promise<void> {
-  errorPostUserIdDiff(req, res)
+  await errorPostUserIdDiff(req, res)
   try {
     const post = await prisma.post.update({
       where: { id: parseInt(req.params.id) },

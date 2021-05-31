@@ -35,9 +35,10 @@ app.post('/posts', protect)
 app.put('/posts/:id', protect)
 app.delete('/posts/:id', protect)
 app.put('/posts/:id/publish', protect)
-app.post('posts/:id/comments', protect)
-app.put('posts/:id/comments/:id', protect)
-app.delete('posts/:id/comments/:id', protect)
+app.post('/posts/:id/comments', protect)
+app.put('/posts/:id/comments/:id', protect)
+app.delete('/posts/:id/comments/:id', protect)
+app.put('/posts/:id/comments/:id/publish', protect)
 
 app.get('/api/v1/status', (req: Request, res: Response) => {
   res.json({ time: new Date() })

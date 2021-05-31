@@ -18,3 +18,19 @@ export async function errorPostUserIdDiff(
     return
   }
 }
+
+export async function errorCommentUserIdDiff(
+  req: Request,
+  res: Response,
+): Promise<void> {
+  const { user } = req.body
+
+  const existComment = await prisma.comment.findUnique({
+    where: { id: parseInt(req.params.id) },
+  })
+
+  if (user.id !== existComment?.authorId) {
+    res.status(200).json({ error: `author id is not the current user` })
+    return
+  }
+}
