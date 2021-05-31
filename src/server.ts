@@ -40,6 +40,7 @@ app.post('/posts/:id/comments', protect)
 app.put('/posts/:id/comments/:id', protect)
 app.delete('/posts/:id/comments/:id', protect)
 app.put('/posts/:id/comments/:id/publish', protect)
+app.put('/posts/:id/comments/:id/liked', protect)
 
 app.get('/api/v1/status', (req: Request, res: Response) => {
   res.json({ time: new Date() })
