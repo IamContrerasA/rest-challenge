@@ -4,6 +4,9 @@ import { errorUserIdDiff, prisma } from './app.controller'
 export async function findUsers(req: Request, res: Response): Promise<void> {
   const allUsers = await prisma.user.findMany()
   res.status(200).json({ users: allUsers })
+
+  if (!allUsers)
+    return res.status(404).json({ error: `Couldn't find any users jet ` }).end()
 }
 
 export async function findUser(req: Request, res: Response): Promise<void> {
@@ -11,13 +14,26 @@ export async function findUser(req: Request, res: Response): Promise<void> {
     where: { id: parseInt(req.params.id) },
   })
 
-  if (!user) throw new Error(`Couldn't find User with id = '${req.params.id}'`)
+  if (!user) {
+    return res
+      .status(404)
+      .json({ error: `Couldn't find User with id = '${req.params.id}'` })
+      .end()
+  }
 
   res.status(200).json({ user: user })
 }
 
 export async function updateUser(req: Request, res: Response): Promise<void> {
-  await errorUserIdDiff(req, res)
+  const permissionError = await errorUserIdDiff(req)
+  if (permissionError)
+    return res
+      .status(403)
+      .json({
+        error: `Current user cannot edit the information of another user, only that of him`,
+      })
+      .end()
+
   const userBody = { ...req.body }
   delete userBody.user
 
@@ -30,12 +46,23 @@ export async function updateUser(req: Request, res: Response): Promise<void> {
       .status(200)
       .json({ user: { ...user, password: 'you know your password ;)' } })
   } catch (error) {
-    throw new Error(`Couldn't find User with id = '${req.params.id}'`)
+    return res
+      .status(404)
+      .json({ error: `Couldn't find User with id = '${req.params.id}'` })
+      .end()
   }
 }
 
 export async function deleteUser(req: Request, res: Response): Promise<void> {
-  await errorUserIdDiff(req, res)
+  const permissionError = await errorUserIdDiff(req)
+  if (permissionError)
+    return res
+      .status(403)
+      .json({
+        error: `Current user cannot edit the information of another user, only that of him`,
+      })
+      .end()
+
   try {
     const user = await prisma.user.delete({
       where: { id: parseInt(req.params.id) },
@@ -43,12 +70,22 @@ export async function deleteUser(req: Request, res: Response): Promise<void> {
 
     res.status(200).json({ user: user })
   } catch (error) {
-    throw new Error(`Couldn't find User with id = '${req.params.id}'`)
+    return res
+      .status(404)
+      .json({ error: `Couldn't find User with id = '${req.params.id}'` })
+      .end()
   }
 }
 
 export async function publicName(req: Request, res: Response): Promise<void> {
-  await errorUserIdDiff(req, res)
+  const permissionError = await errorUserIdDiff(req)
+  if (permissionError)
+    return res
+      .status(403)
+      .json({
+        error: `Current user cannot edit the information of another user, only that of him`,
+      })
+      .end()
 
   try {
     const user = await prisma.user.update({
@@ -61,12 +98,22 @@ export async function publicName(req: Request, res: Response): Promise<void> {
       .status(200)
       .json({ user: { ...user, password: 'you know your password ;)' } })
   } catch (error) {
-    throw new Error(`Couldn't find User with id = '${req.params.id}'`)
+    return res
+      .status(404)
+      .json({ error: `Couldn't find User with id = '${req.params.id}'` })
+      .end()
   }
 }
 
 export async function publicEmail(req: Request, res: Response): Promise<void> {
-  await errorUserIdDiff(req, res)
+  const permissionError = await errorUserIdDiff(req)
+  if (permissionError)
+    return res
+      .status(403)
+      .json({
+        error: `Current user cannot edit the information of another user, only that of him`,
+      })
+      .end()
 
   try {
     const user = await prisma.user.update({
@@ -79,6 +126,9 @@ export async function publicEmail(req: Request, res: Response): Promise<void> {
       .status(200)
       .json({ user: { ...user, password: 'you know your password ;)' } })
   } catch (error) {
-    throw new Error(`Couldn't find User with id = '${req.params.id}'`)
+    return res
+      .status(404)
+      .json({ error: `Couldn't find User with id = '${req.params.id}'` })
+      .end()
   }
 }
