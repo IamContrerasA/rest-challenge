@@ -68,3 +68,49 @@ export async function publishPost(req: Request, res: Response): Promise<void> {
     throw new Error(`Couldn't find post with id = '${req.params.id}'`)
   }
 }
+
+export async function likedPost(req: Request, res: Response): Promise<void> {
+  try {
+    const post = await prisma.post.findUnique({
+      where: {
+        id: parseInt(req.params.id),
+      },
+      select: {
+        liked: true,
+      },
+    })
+    const likedIndex = post?.liked.findIndex(
+      (userId) => userId === req.body.user.id,
+    )
+
+    if (likedIndex === undefined || likedIndex < 0) {
+      await prisma.post.update({
+        where: {
+          id: parseInt(req.params.id),
+        },
+        data: {
+          liked: {
+            push: req.body.user.id,
+          },
+        },
+      })
+    } else {
+      const likedArray = post ? [...post?.liked] : []
+      likedArray.splice(likedIndex, 1)
+
+      await prisma.post.update({
+        where: {
+          id: parseInt(req.params.id),
+        },
+        data: {
+          liked: {
+            set: likedArray,
+          },
+        },
+      })
+    }
+    res.status(200).json({ sucess: true })
+  } catch (error) {
+    throw new Error(`Couldn't find post with id = '${req.params.id}'`)
+  }
+}

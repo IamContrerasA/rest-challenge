@@ -15,7 +15,7 @@ model Comment {
   createdAt DateTime @default(now()) @db.Timestamp(6)
   content   String
   published Boolean  @default(false)
-  liked     Boolean  @default(false)
+  liked     Int []
   authorId  Int
   postId    Int
   User      User     @relation(fields: [authorId], references: [id])
@@ -29,7 +29,7 @@ model Post {
   createdAt DateTime @default(now()) @db.Timestamp(6)
   content   String?
   published Boolean  @default(false)
-  liked     Boolean  @default(false)
+  liked     Int []
   authorId  Int
   Comment   Comment[]
   User      User     @relation(fields: [authorId], references: [id])
