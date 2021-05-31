@@ -3,6 +3,22 @@ import { PrismaClient } from '@prisma/client'
 
 export const prisma = new PrismaClient()
 
+export async function errorUserIdDiff(
+  req: Request,
+  res: Response,
+): Promise<void> {
+  const { user } = req.body
+
+  const existUser = await prisma.user.findUnique({
+    where: { id: parseInt(req.params.id) },
+  })
+
+  if (user.id !== existUser?.id) {
+    res.status(200).json({ error: `id is not the current user` })
+    return
+  }
+}
+
 export async function errorPostUserIdDiff(
   req: Request,
   res: Response,

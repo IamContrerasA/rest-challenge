@@ -36,12 +36,14 @@ model Post {
 }
 
 model User {
-  id        Int      @id @default(autoincrement())
-  firstname String?  @db.VarChar(255)
-  surname   String?  @db.VarChar(255)
-  role      Int      @default(1)
-  email     String   @unique @db.VarChar(255)
-  password  String   @default("")
-  Post      Post[]
-  Comment   Comment[]
+  id            Int      @id @default(autoincrement())
+  firstname     String?  @db.VarChar(255)
+  surname       String?  @db.VarChar(255)
+  isNamePublic  Boolean  @default(false)
+  role          Int      @default(1)
+  email         String   @unique @db.VarChar(255)
+  isEmailPublic Boolean  @default(false)
+  password      String   @default("")
+  Post          Post[]
+  Comment       Comment[]
 }

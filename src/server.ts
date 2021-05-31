@@ -31,6 +31,8 @@ app.post('/signin', signin)
 // Protected routes
 app.put('/accounts/:id', protect)
 app.delete('/accounts/:id', protect)
+app.put('/accounts/:id/publicName', protect)
+app.put('/accounts/:id/publicEmail', protect)
 app.post('/posts', protect)
 app.put('/posts/:id', protect)
 app.delete('/posts/:id', protect)

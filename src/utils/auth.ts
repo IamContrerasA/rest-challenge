@@ -115,6 +115,8 @@ export const protect = async (
       firstname: true,
       surname: true,
       email: true,
+      isNamePublic: true,
+      isEmailPublic: true,
       password: false,
     },
   })
