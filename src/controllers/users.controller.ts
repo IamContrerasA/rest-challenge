@@ -1,7 +1,5 @@
 import { Request, Response } from 'express'
-import { PrismaClient } from '@prisma/client'
-
-const prisma = new PrismaClient()
+import { prisma } from './app.controller'
 
 export async function findUsers(req: Request, res: Response): Promise<void> {
   const allUsers = await prisma.user.findMany()
@@ -24,7 +22,7 @@ export async function updateUser(req: Request, res: Response): Promise<void> {
   const existUser = await prisma.user.findUnique({
     where: { id: parseInt(req.params.id) },
   })
-  console.log(user.id, existUser?.id)
+
   if (user.id !== existUser?.id) {
     res.status(200).json({ error: `author id is not the current user` })
     return

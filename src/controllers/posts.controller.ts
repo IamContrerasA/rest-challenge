@@ -1,7 +1,5 @@
 import { Request, Response } from 'express'
-import { PrismaClient } from '@prisma/client'
-
-const prisma = new PrismaClient()
+import { errorPostUserIdDiff, prisma } from './app.controller'
 
 export async function createPost(req: Request, res: Response): Promise<void> {
   const post = await prisma.post.create({
@@ -24,22 +22,16 @@ export async function findPost(req: Request, res: Response): Promise<void> {
     where: { id: parseInt(req.params.id) },
   })
 
-  if (!post) throw new Error(`Couldn't find Post with id = '${req.params.id}'`)
+  if (!post) throw new Error(`Couldn't find post with id = '${req.params.id}'`)
 
   res.status(200).json({ post: post })
 }
 
 export async function updatePost(req: Request, res: Response): Promise<void> {
-  const { user, ...postBody } = req.body
+  errorPostUserIdDiff(req, res)
+  const postBody = { ...req.body }
+  delete postBody.user
 
-  const existPost = await prisma.post.findUnique({
-    where: { id: parseInt(req.params.id) },
-  })
-
-  if (user.id !== existPost?.authorId) {
-    res.status(200).json({ error: `author id is not the current user` })
-    return
-  }
   try {
     const post = await prisma.post.update({
       where: { id: parseInt(req.params.id) },
@@ -52,36 +44,20 @@ export async function updatePost(req: Request, res: Response): Promise<void> {
 }
 
 export async function deletePost(req: Request, res: Response): Promise<void> {
-  const existPost = await prisma.post.findUnique({
-    where: { id: parseInt(req.params.id) },
-  })
-
-  if (req.body.user.id !== existPost?.authorId) {
-    res.status(200).json({ error: `author id is not the current user` })
-    return
-  }
+  errorPostUserIdDiff(req, res)
   try {
-    const user = await prisma.user.delete({
+    const user = await prisma.post.delete({
       where: { id: parseInt(req.params.id) },
     })
 
     res.status(200).json({ user: user })
   } catch (error) {
-    throw new Error(`Couldn't find User with id = '${req.params.id}'`)
+    throw new Error(`Couldn't find post with id = '${req.params.id}'`)
   }
 }
 
 export async function publishPost(req: Request, res: Response): Promise<void> {
-  const { user } = req.body
-
-  const existPost = await prisma.post.findUnique({
-    where: { id: parseInt(req.params.id) },
-  })
-
-  if (user.id !== existPost?.authorId) {
-    res.status(200).json({ error: `author id is not the current user` })
-    return
-  }
+  errorPostUserIdDiff(req, res)
   try {
     const post = await prisma.post.update({
       where: { id: parseInt(req.params.id) },
