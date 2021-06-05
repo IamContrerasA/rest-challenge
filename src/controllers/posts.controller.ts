@@ -1,5 +1,6 @@
 import { Request, Response } from 'express'
-import { errorPostUserIdDiff, prisma } from './app.controller'
+import { prisma } from '../utils/auth'
+import { errorPostUserIdDiff } from './app.controller'
 
 export async function createPost(req: Request, res: Response): Promise<void> {
   try {

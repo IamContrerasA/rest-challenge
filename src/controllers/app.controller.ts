@@ -1,7 +1,5 @@
 import { Request } from 'express'
-import { PrismaClient } from '@prisma/client'
-
-export const prisma = new PrismaClient()
+import { prisma } from '../utils/auth'
 
 export async function errorUserIdDiff(req: Request): Promise<boolean> {
   const { user } = req.body

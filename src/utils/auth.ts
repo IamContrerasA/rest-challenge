@@ -3,7 +3,7 @@ import { PrismaClient, User } from '@prisma/client'
 import { Request, Response, NextFunction } from 'express'
 import bcrypt from 'bcrypt'
 
-const prisma = new PrismaClient()
+export const prisma = new PrismaClient()
 const JWT_SECRET = 'JWT_SECRET'
 
 export const newToken = (user: User | null): string | Buffer => {
@@ -28,16 +28,20 @@ export const signup = async (req: Request, res: Response): Promise<void> => {
   try {
     bcrypt.hash(req.body.password, 8, async (err, hash) => {
       if (err) {
-        throw new Error(`There is an error on hash password ${err}`)
+        return res.status(400).send({ message: 'error on password hash' })
       }
-      const user = await prisma.user.create({
-        data: {
-          email: req.body.email,
-          password: hash,
-        },
-      })
-      const token = newToken(user)
-      res.status(201).send({ token })
+      try {
+        const user = await prisma.user.create({
+          data: {
+            email: req.body.email,
+            password: hash,
+          },
+        })
+        const token = newToken(user)
+        res.status(201).send({ token })
+      } catch (e) {
+        res.status(400).send({ message: 'email already exists' })
+      }
     })
   } catch (e) {
     return res.status(500).end()

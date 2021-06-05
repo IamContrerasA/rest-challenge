@@ -1,5 +1,6 @@
 import { Request, Response } from 'express'
-import { errorUserIdDiff, prisma } from './app.controller'
+import { prisma } from '../utils/auth'
+import { errorUserIdDiff } from './app.controller'
 
 export async function findUsers(req: Request, res: Response): Promise<void> {
   const allUsers = await prisma.user.findMany()

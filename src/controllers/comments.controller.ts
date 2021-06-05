@@ -1,5 +1,6 @@
 import { Request, Response } from 'express'
-import { errorCommentUserIdDiff, prisma } from './app.controller'
+import { prisma } from '../utils/auth'
+import { errorCommentUserIdDiff } from './app.controller'
 
 export async function createComment(
   req: Request,
