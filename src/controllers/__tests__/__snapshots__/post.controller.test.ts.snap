@@ -1,0 +1,15 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`test post controller error way create post with empty data is invalid 1`] = `"Couldn't create a post"`;
+
+exports[`test post controller error way delete empty specific post is invalid 1`] = `"Current user cannot edit the information of another user, only that of him"`;
+
+exports[`test post controller error way find empty posts is invalid 1`] = `"Couldn't find any posts jet"`;
+
+exports[`test post controller error way find empty specific post is invalid 1`] = `"Couldn't find pos with id = '100'"`;
+
+exports[`test post controller error way like empty specific post is invalid 1`] = `"Couldn't find pos with id = '100'"`;
+
+exports[`test post controller error way publish empty specific post is isvalid 1`] = `"Current user cannot edit the information of another user, only that of him"`;
+
+exports[`test post controller error way update empty specific post is invalid 1`] = `"Current user cannot edit the information of another user, only that of him"`;

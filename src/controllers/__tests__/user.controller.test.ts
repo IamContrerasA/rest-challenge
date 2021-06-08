@@ -163,7 +163,7 @@ describe('test user controller happy way', () => {
   })
 })
 
-describe('test user controller happy way', () => {
+describe('test user controller error way', () => {
   test('find all users without users is invalid', async () => {
     const req: any = {}
 

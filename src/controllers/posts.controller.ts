@@ -20,8 +20,8 @@ export async function createPost(req: Request, res: Response): Promise<void> {
 export async function findPosts(req: Request, res: Response): Promise<void> {
   const allPosts = await prisma.post.findMany()
 
-  if (!allPosts)
-    return res.status(404).json({ error: `Couldn't find any posts jet ` }).end()
+  if (!allPosts.length)
+    return res.status(404).json({ error: `Couldn't find any posts jet` }).end()
 
   res.status(200).json({ posts: allPosts })
 }
