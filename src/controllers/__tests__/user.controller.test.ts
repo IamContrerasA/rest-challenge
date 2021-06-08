@@ -1,9 +1,18 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
 import { prisma, signup } from '../../utils/auth'
-import { findUser, findUsers } from '../users.controller'
+import {
+  deleteUser,
+  findUser,
+  findUsers,
+  publicEmail,
+  publicName,
+  updateUser,
+} from '../users.controller'
 
 let token: string
-
+// test('token', async () => {
+//   console.log(token)
+// })
 beforeAll(async () => {
   const req: any = {
     body: {
@@ -38,40 +47,118 @@ afterAll(async () => {
   await prisma.$disconnect()
 })
 
-test('find all users', async () => {
-  await new Promise((r) => setTimeout(r, 2000))
-  const req: any = {}
+describe('test user controller happy way', () => {
+  test('find all users', async () => {
+    await new Promise((r) => setTimeout(r, 2000))
+    const req: any = {}
 
-  const res: any = {
-    status: function (statusNumber: number) {
-      expect(statusNumber).toBe(200)
-      return this
-    },
-    json: function (jsonResult: any) {
-      expect(jsonResult.users[0].email).toBe('myemail13@email.com')
-      return this
-    },
-  }
-  await findUsers(req, res)
-})
+    const res: any = {
+      status: function (statusNumber: number) {
+        expect(statusNumber).toBe(200)
+        return this
+      },
+      json: function (jsonResult: any) {
+        expect(jsonResult.users[0].email).toBe('myemail13@email.com')
+        return this
+      },
+    }
+    await findUsers(req, res)
+  })
 
-test('find specific user', async () => {
-  const req: any = { params: { id: 1 } }
+  test('find specific user', async () => {
+    const req: any = { params: { id: 1 } }
 
-  const res: any = {
-    status: function (statusNumber: number) {
-      expect(statusNumber).toBe(200)
-      return this
-    },
-    json: function (jsonResult: any) {
-      expect(jsonResult.user.id).toBe(1)
-      return this
-    },
-    end: () => this,
-  }
-  await findUser(req, res)
-})
+    const res: any = {
+      status: function (statusNumber: number) {
+        expect(statusNumber).toBe(200)
+        return this
+      },
+      json: function (jsonResult: any) {
+        expect(jsonResult.user.id).toBe(1)
+        return this
+      },
+      end: () => this,
+    }
+    await findUser(req, res)
+  })
 
-test('token', async () => {
-  console.log(token)
+  test('update specific user', async () => {
+    const req: any = {
+      params: { id: 1 },
+      body: { firstname: 'nombre', user: { id: 1 } },
+    }
+
+    const res: any = {
+      status: function (statusNumber: number) {
+        expect(statusNumber).toBe(200)
+        return this
+      },
+      json: function (jsonResult: any) {
+        expect(jsonResult.user.id).toBe(1)
+        return this
+      },
+      end: () => this,
+    }
+    await updateUser(req, res)
+  })
+
+  test('set public name to specific user', async () => {
+    const req: any = {
+      params: { id: 1 },
+      body: { isNamePublic: false, user: { id: 1 } },
+    }
+
+    const res: any = {
+      status: function (statusNumber: number) {
+        expect(statusNumber).toBe(200)
+        return this
+      },
+      json: function (jsonResult: any) {
+        expect(jsonResult.user.isNamePublic).toBe(true)
+        return this
+      },
+      end: () => this,
+    }
+    await publicName(req, res)
+  })
+
+  test('set public email to specific user', async () => {
+    const req: any = {
+      params: { id: 1 },
+      body: { isEmailPublic: false, user: { id: 1 } },
+    }
+
+    const res: any = {
+      status: function (statusNumber: number) {
+        expect(statusNumber).toBe(200)
+        return this
+      },
+      json: function (jsonResult: any) {
+        expect(jsonResult.user.isEmailPublic).toBe(true)
+        return this
+      },
+      end: () => this,
+    }
+    await publicEmail(req, res)
+  })
+
+  test('delete specific user', async () => {
+    const req: any = {
+      params: { id: 1 },
+      body: { user: { id: 1 } },
+    }
+
+    const res: any = {
+      status: function (statusNumber: number) {
+        expect(statusNumber).toBe(200)
+        return this
+      },
+      json: function (jsonResult: any) {
+        expect(jsonResult.user.id).toBe(1)
+        return this
+      },
+      end: () => this,
+    }
+    await deleteUser(req, res)
+  })
 })
