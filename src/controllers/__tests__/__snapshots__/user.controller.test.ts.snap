@@ -1,0 +1,13 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`test user controller happy way delete empty user is invalid 1`] = `"Current user cannot edit the information of another user, only that of him"`;
+
+exports[`test user controller happy way find all users without users is invalid 1`] = `"Couldn't find any users jet"`;
+
+exports[`test user controller happy way find empty user is invalid 1`] = `"Couldn't find User with id = '100'"`;
+
+exports[`test user controller happy way set public email to empty user is invalid 1`] = `"Current user cannot edit the information of another user, only that of him"`;
+
+exports[`test user controller happy way set public name to empty user is invalid 1`] = `"Current user cannot edit the information of another user, only that of him"`;
+
+exports[`test user controller happy way update empty user is invalid 1`] = `"Current user cannot edit the information of another user, only that of him"`;

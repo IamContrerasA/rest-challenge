@@ -4,10 +4,11 @@ import { errorUserIdDiff } from './app.controller'
 
 export async function findUsers(req: Request, res: Response): Promise<void> {
   const allUsers = await prisma.user.findMany()
-  res.status(200).json({ users: allUsers })
 
-  if (!allUsers)
-    return res.status(404).json({ error: `Couldn't find any users jet ` }).end()
+  if (!allUsers.length)
+    return res.status(404).json({ error: `Couldn't find any users jet` }).end()
+
+  res.status(200).json({ users: allUsers })
 }
 
 export async function findUser(req: Request, res: Response): Promise<void> {

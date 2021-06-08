@@ -162,3 +162,119 @@ describe('test user controller happy way', () => {
     await deleteUser(req, res)
   })
 })
+
+describe('test user controller happy way', () => {
+  test('find all users without users is invalid', async () => {
+    const req: any = {}
+
+    const res: any = {
+      status: function (statusNumber: number) {
+        expect(statusNumber).toBe(404)
+        return this
+      },
+      json: function (jsonResult: any) {
+        expect(jsonResult.error).toMatchSnapshot()
+        return this
+      },
+      end: () => this,
+    }
+    await findUsers(req, res)
+  })
+
+  test('find empty user is invalid', async () => {
+    const req: any = { params: { id: 100 } }
+
+    const res: any = {
+      status: function (statusNumber: number) {
+        expect(statusNumber).toBe(404)
+        return this
+      },
+      json: function (jsonResult: any) {
+        expect(jsonResult.error).toMatchSnapshot()
+        return this
+      },
+      end: () => this,
+    }
+    await findUser(req, res)
+  })
+
+  test('update empty user is invalid', async () => {
+    const req: any = {
+      params: { id: 100 },
+      body: { firstname: 'nombre', user: { id: 100 } },
+    }
+
+    const res: any = {
+      status: function (statusNumber: number) {
+        expect(statusNumber).toBe(403)
+        return this
+      },
+      json: function (jsonResult: any) {
+        expect(jsonResult.error).toMatchSnapshot()
+        return this
+      },
+      end: () => this,
+    }
+    await updateUser(req, res)
+  })
+
+  test('set public name to empty user is invalid', async () => {
+    const req: any = {
+      params: { id: 100 },
+      body: { isNamePublic: false, user: { id: 100 } },
+    }
+
+    const res: any = {
+      status: function (statusNumber: number) {
+        expect(statusNumber).toBe(403)
+        return this
+      },
+      json: function (jsonResult: any) {
+        expect(jsonResult.error).toMatchSnapshot()
+        return this
+      },
+      end: () => this,
+    }
+    await publicName(req, res)
+  })
+
+  test('set public email to empty user is invalid', async () => {
+    const req: any = {
+      params: { id: 100 },
+      body: { isEmailPublic: false, user: { id: 100 } },
+    }
+
+    const res: any = {
+      status: function (statusNumber: number) {
+        expect(statusNumber).toBe(403)
+        return this
+      },
+      json: function (jsonResult: any) {
+        expect(jsonResult.error).toMatchSnapshot()
+        return this
+      },
+      end: () => this,
+    }
+    await publicEmail(req, res)
+  })
+
+  test('delete empty user is invalid', async () => {
+    const req: any = {
+      params: { id: 1 },
+      body: { user: { id: 1 } },
+    }
+
+    const res: any = {
+      status: function (statusNumber: number) {
+        expect(statusNumber).toBe(403)
+        return this
+      },
+      json: function (jsonResult: any) {
+        expect(jsonResult.error).toMatchSnapshot()
+        return this
+      },
+      end: () => this,
+    }
+    await deleteUser(req, res)
+  })
+})
