@@ -52,123 +52,125 @@ afterAll(async () => {
   await prisma.$disconnect()
 })
 
-test('create post is valid', async () => {
-  await new Promise((r) => setTimeout(r, 2000))
+describe('test post controller happy way', () => {
+  test('create post is valid', async () => {
+    await new Promise((r) => setTimeout(r, 2000))
 
-  const req: any = reqGlobal
+    const req: any = reqGlobal
 
-  const res: any = {
-    status: function (statusNumber: number) {
-      expect(statusNumber).toBe(200)
-      return this
-    },
-    json: function (jsonResult: any) {
-      expect(jsonResult.post.title).toBe('title of fake post')
-      return this
-    },
-  }
-  await createPost(req, res)
-})
+    const res: any = {
+      status: function (statusNumber: number) {
+        expect(statusNumber).toBe(200)
+        return this
+      },
+      json: function (jsonResult: any) {
+        expect(jsonResult.post.title).toBe('title of fake post')
+        return this
+      },
+    }
+    await createPost(req, res)
+  })
 
-test('find post is valid', async () => {
-  const req: any = reqGlobal
+  test('find post is valid', async () => {
+    const req: any = reqGlobal
 
-  const res: any = {
-    status: function (statusNumber: number) {
-      expect(statusNumber).toBe(200)
-      return this
-    },
-    json: function (jsonResult: any) {
-      expect(jsonResult.posts[0].title).toBe('title of fake post')
-      return this
-    },
-  }
-  await findPosts(req, res)
-})
+    const res: any = {
+      status: function (statusNumber: number) {
+        expect(statusNumber).toBe(200)
+        return this
+      },
+      json: function (jsonResult: any) {
+        expect(jsonResult.posts[0].title).toBe('title of fake post')
+        return this
+      },
+    }
+    await findPosts(req, res)
+  })
 
-test('find specific post is valid', async () => {
-  const req: any = reqGlobal
+  test('find specific post is valid', async () => {
+    const req: any = reqGlobal
 
-  const res: any = {
-    status: function (statusNumber: number) {
-      expect(statusNumber).toBe(200)
-      return this
-    },
-    json: function (jsonResult: any) {
-      expect(jsonResult.post.title).toBe('title of fake post')
-      return this
-    },
-  }
-  await findPost(req, res)
-})
+    const res: any = {
+      status: function (statusNumber: number) {
+        expect(statusNumber).toBe(200)
+        return this
+      },
+      json: function (jsonResult: any) {
+        expect(jsonResult.post.title).toBe('title of fake post')
+        return this
+      },
+    }
+    await findPost(req, res)
+  })
 
-test('find specific post is valid', async () => {
-  const req: any = {
-    ...reqGlobal,
-    body: { ...reqGlobal.body, title: 'updated title' },
-  }
+  test('find specific post is valid', async () => {
+    const req: any = {
+      ...reqGlobal,
+      body: { ...reqGlobal.body, title: 'updated title' },
+    }
 
-  const res: any = {
-    status: function (statusNumber: number) {
-      expect(statusNumber).toBe(200)
-      return this
-    },
-    json: function (jsonResult: any) {
-      expect(jsonResult.post.title).toBe('updated title')
-      return this
-    },
-  }
-  await updatePost(req, res)
-})
+    const res: any = {
+      status: function (statusNumber: number) {
+        expect(statusNumber).toBe(200)
+        return this
+      },
+      json: function (jsonResult: any) {
+        expect(jsonResult.post.title).toBe('updated title')
+        return this
+      },
+    }
+    await updatePost(req, res)
+  })
 
-test('publish specific post is valid', async () => {
-  const req: any = reqGlobal
+  test('publish specific post is valid', async () => {
+    const req: any = reqGlobal
 
-  const res: any = {
-    status: function (statusNumber: number) {
-      expect(statusNumber).toBe(200)
-      return this
-    },
-    json: function (jsonResult: any) {
-      expect(jsonResult.post.published).toBe(true)
-      return this
-    },
-  }
-  await publishPost(req, res)
-})
+    const res: any = {
+      status: function (statusNumber: number) {
+        expect(statusNumber).toBe(200)
+        return this
+      },
+      json: function (jsonResult: any) {
+        expect(jsonResult.post.published).toBe(true)
+        return this
+      },
+    }
+    await publishPost(req, res)
+  })
 
-test('like specific post is valid', async () => {
-  const req: any = {
-    ...reqGlobal,
-    body: { ...reqGlobal.body, liked: [] },
-  }
+  test('like specific post is valid', async () => {
+    const req: any = {
+      ...reqGlobal,
+      body: { ...reqGlobal.body, liked: [] },
+    }
 
-  const res: any = {
-    status: function (statusNumber: number) {
-      expect(statusNumber).toBe(200)
-      return this
-    },
-    json: function (jsonResult: any) {
-      expect(jsonResult.post.liked[0]).toBe(1)
-      return this
-    },
-    end: () => this,
-  }
-  await likedPost(req, res)
-})
+    const res: any = {
+      status: function (statusNumber: number) {
+        expect(statusNumber).toBe(200)
+        return this
+      },
+      json: function (jsonResult: any) {
+        expect(jsonResult.success).toBe(true)
+        return this
+      },
+      end: () => this,
+    }
+    await likedPost(req, res)
+  })
 
-test('delete specific post is valid', async () => {
-  const req: any = reqGlobal
+  test('delete specific post is valid', async () => {
+    const req: any = reqGlobal
 
-  const res: any = {
-    status: function (statusNumber: number) {
-      expect(statusNumber).toBe(200)
-      return this
-    },
-    json: function (jsonResult: any) {
-      expect(jsonResult.post.title).toBe('updated title')
-      return this
-    },
-  }
-  await deletePost(req, res)
+    const res: any = {
+      status: function (statusNumber: number) {
+        expect(statusNumber).toBe(200)
+        return this
+      },
+      json: function (jsonResult: any) {
+        expect(jsonResult.post.title).toBe('updated title')
+        return this
+      },
+    }
+    await deletePost(req, res)
+  })
 })
