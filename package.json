@@ -5,8 +5,8 @@
   "main": "index.js",
   "scripts": {
     "test": "jest",
-    "test:coverage": "jest --collect-coverage",
-    "test:watch": "jest --watchAll",
+    "test:coverage": "jest --collect-coverage --runInBand",
+    "test:watch": "jest --watchAll --runInBand",
     "lint": "tsc --noEmit && eslint src/**/*.ts --color --max-warnings=0",
     "format": "prettier --write src/**/*.ts",
     "start": "nodemon ./src/server.ts",
