@@ -13,10 +13,7 @@ export async function createPost(req: Request, res: Response): Promise<void> {
     })
     res.status(200).json({ post: post })
   } catch (error) {
-    return res
-      .status(404)
-      .json({ error: `Couldn't find pos with id = '${req.params.id}'` })
-      .end()
+    return res.status(404).json({ error: `Couldn't create a post` }).end()
   }
 }
 
