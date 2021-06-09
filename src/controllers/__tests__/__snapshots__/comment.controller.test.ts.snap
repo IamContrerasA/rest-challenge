@@ -1,0 +1,15 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`test comment controller error way create comment with empty data is invalid 1`] = `"Couldn't find comment with id = '1'"`;
+
+exports[`test comment controller error way delete empty specific comment is invalid 1`] = `"Current user cannot edit the information of another user, only that of him"`;
+
+exports[`test comment controller error way find empty comments is invalid 1`] = `"Couldn't find comments with post id = '1'"`;
+
+exports[`test comment controller error way find empty specific comment is invalid 1`] = `"Couldn't find comment with id = '100'"`;
+
+exports[`test comment controller error way like empty specific comment is invalid 1`] = `"Couldn't find comment with id = '100'"`;
+
+exports[`test comment controller error way publish empty specific comment is isvalid 1`] = `"Current user cannot edit the information of another user, only that of him"`;
+
+exports[`test comment controller error way update empty specific comment is invalid 1`] = `"Current user cannot edit the information of another user, only that of him"`;

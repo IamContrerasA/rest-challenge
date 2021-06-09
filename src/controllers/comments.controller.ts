@@ -135,50 +135,50 @@ export async function publishComment(
 }
 
 export async function likedComment(req: Request, res: Response): Promise<void> {
-  try {
-    const comment = await prisma.comment.findUnique({
-      where: {
-        id: parseInt(req.params.id),
-      },
-      select: {
-        liked: true,
-      },
-    })
-    const likedIndex = comment?.liked.findIndex(
-      (userId) => userId === req.body.user.id,
-    )
+  const comment = await prisma.comment.findUnique({
+    where: {
+      id: parseInt(req.params.id),
+    },
+    select: {
+      liked: true,
+    },
+  })
 
-    if (likedIndex === undefined || likedIndex < 0) {
-      await prisma.comment.update({
-        where: {
-          id: parseInt(req.params.id),
-        },
-        data: {
-          liked: {
-            push: req.body.user.id,
-          },
-        },
-      })
-    } else {
-      const likedArray = comment ? [...comment?.liked] : []
-      likedArray.splice(likedIndex, 1)
-
-      await prisma.comment.update({
-        where: {
-          id: parseInt(req.params.id),
-        },
-        data: {
-          liked: {
-            set: likedArray,
-          },
-        },
-      })
-    }
-    res.status(200).json({ sucess: true })
-  } catch (error) {
+  if (!comment)
     return res
       .status(404)
       .json({ error: `Couldn't find comment with id = '${req.params.id}'` })
       .end()
+
+  const likedIndex = comment?.liked.findIndex(
+    (userId) => userId === req.body.user.id,
+  )
+
+  if (likedIndex === undefined || likedIndex < 0) {
+    await prisma.comment.update({
+      where: {
+        id: parseInt(req.params.id),
+      },
+      data: {
+        liked: {
+          push: req.body.user.id,
+        },
+      },
+    })
+  } else {
+    const likedArray = comment ? [...comment?.liked] : []
+    likedArray.splice(likedIndex, 1)
+
+    await prisma.comment.update({
+      where: {
+        id: parseInt(req.params.id),
+      },
+      data: {
+        liked: {
+          set: likedArray,
+        },
+      },
+    })
   }
+  res.status(200).json({ success: true })
 }
