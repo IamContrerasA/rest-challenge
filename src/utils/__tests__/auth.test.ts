@@ -74,9 +74,109 @@ describe('auth happy way', () => {
       },
       send: function (sendResult: any) {
         expect(sendResult.user.id).toBe(1)
-        token = sendResult.token
         return this
       },
+    }
+    await protect(req, res, jest.fn())
+  })
+})
+
+describe('auth error way', () => {
+  test('signup with incorrect values is invalid', async () => {
+    const req: any = { body: {} }
+
+    const res: any = {
+      status: function (statusNumber: number) {
+        expect(statusNumber).toBe(400)
+        return this
+      },
+      send: function (sendResult: any) {
+        expect(sendResult.message).toMatchSnapshot()
+        return this
+      },
+    }
+    await signup(req, res)
+  })
+
+  test('signup with email already exist is invalid', async () => {
+    const req: any = {
+      body: {
+        email: 'myemail16@email.com',
+        password: 'password16',
+      },
+    }
+
+    const res: any = {
+      status: function (statusNumber: number) {
+        expect(statusNumber).toBe(400)
+        return this
+      },
+      send: function (sendResult: any) {
+        expect(sendResult.message).toMatchSnapshot()
+        return this
+      },
+    }
+    await signup(req, res)
+  })
+
+  test('signin with incorrect values is invalid', async () => {
+    const req: any = {
+      body: {
+        email: 'invalid@email.com',
+        password: 'invalid',
+      },
+    }
+
+    const res: any = {
+      status: function (statusNumber: number) {
+        expect(statusNumber).toBe(500)
+        return this
+      },
+      send: function (sendResult: any) {
+        expect(sendResult.message).toMatchSnapshot()
+        return this
+      },
+      end: () => this,
+    }
+    await signin(req, res)
+  })
+
+  test('protect with incorrect values is invalid', async () => {
+    const req: any = {
+      body: {},
+      headers: { authorization: `Bearer faketoken` },
+    }
+
+    const res: any = {
+      status: function (statusNumber: number) {
+        expect(statusNumber).toBe(401)
+        return this
+      },
+      send: function (sendResult: any) {
+        expect(sendResult).toMatchSnapshot()
+        return this
+      },
+      end: () => this,
+    }
+    await protect(req, res, jest.fn())
+  })
+
+  test('protect without  values is invalid', async () => {
+    const req: any = {
+      body: {},
+      headers: { authorization: '' },
+    }
+
+    const res: any = {
+      status: function (statusNumber: number) {
+        expect(statusNumber).toBe(401)
+        return this
+      },
+      send: function (sendResult: any) {
+        expect(sendResult).toMatchSnapshot()
+        return this
+      },
+      end: () => this,
     }
     await protect(req, res, jest.fn())
   })

@@ -1,0 +1,7 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`auth error way protect without  values is invalid 1`] = `"email already exists"`;
+
+exports[`auth error way signin with incorrect values is invalid 1`] = `"error on password hash"`;
+
+exports[`auth error way signup with incorrect values is invalid 1`] = `"need email and password"`;
