@@ -9,10 +9,6 @@ import {
   updateUser,
 } from '../users.controller'
 
-let token: string
-// test('token', async () => {
-//   console.log(token)
-// })
 beforeAll(async () => {
   const req: any = {
     body: {
@@ -26,10 +22,7 @@ beforeAll(async () => {
       expect(statusNumber).toBe(201)
       return this
     },
-    send: function (sendResult: any) {
-      token = sendResult.token
-      return this
-    },
+    send: () => this,
   }
   await signup(req, res)
 })
