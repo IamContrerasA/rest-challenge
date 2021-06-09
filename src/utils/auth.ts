@@ -53,7 +53,6 @@ function checkPassword(userPassord: string, password: string) {
   return new Promise((resolve, reject) => {
     bcrypt.compare(password, userPassord, (err, same) => {
       if (err) {
-        console.log(err)
         return reject(err)
       }
       resolve(same)
@@ -87,8 +86,7 @@ export async function signin(req: Request, res: Response): Promise<void> {
     const token = newToken(user)
     res.status(201).send({ token })
   } catch (e) {
-    console.error(e)
-    res.status(500).end()
+    return res.status(500).end()
   }
 }
 
@@ -125,7 +123,7 @@ export const protect = async (
     },
   })
   if (!user) {
-    return res.status(401).end()
+    return res.status(402).end()
   }
 
   req.body.user = user
