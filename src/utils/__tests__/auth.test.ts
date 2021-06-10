@@ -1,5 +1,5 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
-import { prisma, protect, signin, signup } from '../../utils/auth'
+import { prisma, protect, signin, signup, verifyemail } from '../../utils/auth'
 
 let token: string
 
@@ -36,6 +36,32 @@ describe('auth happy way', () => {
       },
     }
     await signup(req, res)
+  })
+
+  test('verify email with correct values is valid', async () => {
+    await new Promise((r) => setTimeout(r, 500))
+    await prisma.user.update({
+      where: { id: 1 },
+      data: { emailToken: 'faketoken' },
+    })
+    await new Promise((r) => setTimeout(r, 500))
+    const req: any = {
+      params: {
+        emailToken: 'faketoken',
+      },
+    }
+
+    const res: any = {
+      status: function (statusNumber: number) {
+        expect(statusNumber).toBe(201)
+        return this
+      },
+      send: function (sendResult: any) {
+        expect(sendResult.message).toMatchSnapshot()
+        return this
+      },
+    }
+    await verifyemail(req, res)
   })
 
   test('signin with correct values is valid', async () => {
@@ -141,6 +167,28 @@ describe('auth error way', () => {
     await signin(req, res)
   })
 
+  test('signin without email or password  is invalid', async () => {
+    const req: any = {
+      body: {
+        email: undefined,
+        password: undefined,
+      },
+    }
+
+    const res: any = {
+      status: function (statusNumber: number) {
+        expect(statusNumber).toBe(400)
+        return this
+      },
+      send: function (sendResult: any) {
+        expect(sendResult.message).toMatchSnapshot()
+        return this
+      },
+      end: () => this,
+    }
+    await signin(req, res)
+  })
+
   test('protect with incorrect values is invalid', async () => {
     const req: any = {
       body: {},
@@ -179,5 +227,25 @@ describe('auth error way', () => {
       end: () => this,
     }
     await protect(req, res, jest.fn())
+  })
+
+  test('verify email with incorrect values is invalid', async () => {
+    const req: any = {
+      params: {
+        emailToken: 'faketoken',
+      },
+    }
+
+    const res: any = {
+      status: function (statusNumber: number) {
+        expect(statusNumber).toBe(401)
+        return this
+      },
+      send: function (sendResult: any) {
+        expect(sendResult.message).toMatchSnapshot()
+        return this
+      },
+    }
+    await verifyemail(req, res)
   })
 })

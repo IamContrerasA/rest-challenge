@@ -4,7 +4,7 @@ import { Request, Response, NextFunction } from 'express'
 import bcrypt from 'bcrypt'
 
 export const prisma = new PrismaClient()
-const JWT_SECRET = 'JWT_SECRET'
+const JWT_SECRET = `${process.env.JWT_SECRET}`
 
 export const newToken = (user: User | null): string | Buffer => {
   return jwt.sign({ id: user?.id }, JWT_SECRET, {
@@ -66,7 +66,7 @@ function checkPassword(userPassord: string, password: string) {
 
 export async function signin(req: Request, res: Response): Promise<void> {
   if (!req.body.email || !req.body.password) {
-    res.status(400).send({ message: 'need email and password' })
+    return res.status(400).send({ message: 'need email and password' }).end()
   }
 
   const invalid = 'Invalid email or passoword combination'
