@@ -1,7 +1,7 @@
 import express, { Request, Response, NextFunction } from 'express'
 import cors from 'cors'
 import { apiRouter } from './router'
-import { protect, signin, signup, verifyemail } from './utils/auth'
+import { protect, signin, signup, verifyemail, signout } from './utils/auth'
 
 const app = express()
 const PORT = process.env.API_PORT || 3000
@@ -28,6 +28,7 @@ app.use(cors())
 app.post('/signup', signup)
 app.post('/verify-account/:emailToken', verifyemail)
 app.post('/signin', signin)
+app.post('/signout', signout)
 
 // Protected routes
 app.put('/accounts/:id', protect)

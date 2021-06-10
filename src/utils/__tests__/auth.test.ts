@@ -1,5 +1,12 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
-import { prisma, protect, signin, signup, verifyemail } from '../../utils/auth'
+import {
+  prisma,
+  protect,
+  signin,
+  signout,
+  signup,
+  verifyemail,
+} from '../../utils/auth'
 
 let token: string
 
@@ -102,6 +109,45 @@ describe('auth happy way', () => {
         expect(sendResult.user.id).toBe(1)
         return this
       },
+    }
+    await protect(req, res, jest.fn())
+  })
+
+  test('signout with correct values is valid', async () => {
+    const req: any = {
+      body: {},
+      headers: { authorization: `Bearer ${token}` },
+    }
+
+    const res: any = {
+      status: function (statusNumber: number) {
+        expect(statusNumber).toBe(201)
+        return this
+      },
+      send: function (sendResult: any) {
+        expect(sendResult.message).toMatchSnapshot()
+        return this
+      },
+    }
+    await signout(req, res)
+  })
+
+  test('protect without signin correct values is valid', async () => {
+    const req: any = {
+      body: {},
+      headers: { authorization: `Bearer ${token}` },
+    }
+
+    const res: any = {
+      status: function (statusNumber: number) {
+        expect(statusNumber).toBe(401)
+        return this
+      },
+      send: function (sendResult: any) {
+        expect(sendResult.message).toMatchSnapshot()
+        return this
+      },
+      end: () => this,
     }
     await protect(req, res, jest.fn())
   })
@@ -247,5 +293,45 @@ describe('auth error way', () => {
       },
     }
     await verifyemail(req, res)
+  })
+
+  test('signout with incorrect values is valid', async () => {
+    const req: any = {
+      body: {},
+      headers: { authorization: `Bearer fake token` },
+    }
+
+    const res: any = {
+      status: function (statusNumber: number) {
+        expect(statusNumber).toBe(401)
+        return this
+      },
+      send: function (sendResult: any) {
+        expect(sendResult.message).toMatchSnapshot()
+        return this
+      },
+      end: () => this,
+    }
+    await signout(req, res)
+  })
+
+  test('signout with incorrect values is valid', async () => {
+    const req: any = {
+      body: {},
+      headers: { authorization: `NoBearer` },
+    }
+
+    const res: any = {
+      status: function (statusNumber: number) {
+        expect(statusNumber).toBe(401)
+        return this
+      },
+      send: function (sendResult: any) {
+        expect(sendResult.message).toMatchSnapshot()
+        return this
+      },
+      end: () => this,
+    }
+    await signout(req, res)
   })
 })

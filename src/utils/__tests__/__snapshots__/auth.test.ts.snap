@@ -4,10 +4,14 @@ exports[`auth error way signin with incorrect values is invalid 1`] = `"error on
 
 exports[`auth error way signin without email or password  is invalid 1`] = `"need email and password"`;
 
+exports[`auth error way signout with incorrect values is valid 1`] = `"email already exists"`;
+
 exports[`auth error way signup with incorrect values is invalid 1`] = `"need email and password"`;
 
 exports[`auth error way verify email with incorrect values is invalid 1`] = `"User not found"`;
 
-exports[`auth error way verify email with incorrect values is invalid 2`] = `"email already exists"`;
+exports[`auth happy way protect without signin correct values is valid 1`] = `"Please signin first"`;
+
+exports[`auth happy way signout with correct values is valid 1`] = `"user logout"`;
 
 exports[`auth happy way verify email with correct values is valid 1`] = `"Email verified!"`;

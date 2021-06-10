@@ -46,6 +46,7 @@ model User {
   password      String   @default("")
   status        STATUS   @default(PENDING)
   emailToken    String   @unique
+  isLogged      Boolean  @default(true)
   Post          Post[]
   Comment       Comment[]
 }

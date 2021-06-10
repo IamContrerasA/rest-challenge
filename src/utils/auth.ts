@@ -91,6 +91,13 @@ export async function signin(req: Request, res: Response): Promise<void> {
     if (user.status === 'PENDING')
       res.status(401).send({ message: `User email does not verified` })
 
+    await prisma.user.update({
+      where: { id: user.id },
+      data: {
+        isLogged: true,
+      },
+    })
+
     const token = newToken(user)
     res.status(201).send({ token })
   } catch (e) {
@@ -130,15 +137,47 @@ export const protect = async (
       status: true, // pending, success
       emailToken: false, // a hash
       password: false,
+      isLogged: true,
     },
   })
   if (!user) {
     return res.status(402).end()
   }
   if (user.status === 'PENDING') return res.status(402).end()
+  if (!user.isLogged)
+    return res.status(401).send({ message: `Please signin first` }).end()
 
   req.body.user = user
   next()
+}
+
+export const signout = async (req: Request, res: Response): Promise<void> => {
+  const bearer = req.headers.authorization
+
+  if (!bearer || !bearer.startsWith('Bearer ')) {
+    return res.status(401).end()
+  }
+
+  const token = bearer.split('Bearer ')[1].trim()
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
+  let payload: any
+  try {
+    payload = await verifyToken(token)
+  } catch (e) {
+    return res.status(401).end()
+  }
+
+  const user = await prisma.user.update({
+    where: { id: payload.id },
+    data: {
+      isLogged: false,
+    },
+  })
+  if (!user) {
+    return res.status(402).end()
+  }
+
+  if (!user.isLogged) res.status(201).send({ message: `user logout` })
 }
 
 export async function verifyemail(req: Request, res: Response): Promise<void> {
