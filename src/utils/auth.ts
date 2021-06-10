@@ -31,8 +31,9 @@ export const signup = async (req: Request, res: Response): Promise<void> => {
         return res.status(400).send({ message: 'error on password hash' })
       }
       try {
-        const emailToken = await bcrypt.hash(`${process.env.EMAIL_TOKEN}`, 4)
-        emailToken.replace(/\//g, 'a')
+        const emailToken = (
+          await bcrypt.hash(`${process.env.EMAIL_TOKEN}`, 4)
+        ).replace(/\//g, 'a')
         const user = await prisma.user.create({
           data: {
             email: req.body.email,
