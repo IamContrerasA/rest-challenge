@@ -31,12 +31,16 @@ export const signup = async (req: Request, res: Response): Promise<void> => {
         return res.status(400).send({ message: 'error on password hash' })
       }
       try {
+        const emailToken = await bcrypt.hash(`${process.env.EMAIL_TOKEN}`, 4)
+        emailToken.replace(/\//g, 'a')
         const user = await prisma.user.create({
           data: {
             email: req.body.email,
             password: hash,
+            emailToken: emailToken,
           },
         })
+
         const token = newToken(user)
         res.status(201).send({ token })
       } catch (e) {
@@ -65,7 +69,7 @@ export async function signin(req: Request, res: Response): Promise<void> {
     res.status(400).send({ message: 'need email and password' })
   }
 
-  const invalid = 'Invalid email and passoword combination'
+  const invalid = 'Invalid email or passoword combination'
 
   try {
     const user = await prisma.user.findUnique({
@@ -73,15 +77,18 @@ export async function signin(req: Request, res: Response): Promise<void> {
     })
 
     if (!user) {
-      res.status(401).send({ message: `${invalid}, no user found` })
+      res.status(401).send({ message: `User not found` })
       return
     }
 
     const match = await checkPassword(user.password, req.body.password)
 
     if (!match) {
-      res.status(401).send({ message: `${invalid}, password dont match` })
+      res.status(401).send({ message: `${invalid}, User password dont match` })
     }
+
+    if (user.status === 'PENDING')
+      res.status(401).send({ message: `User email does not verified` })
 
     const token = newToken(user)
     res.status(201).send({ token })
@@ -119,13 +126,39 @@ export const protect = async (
       email: true,
       isNamePublic: true,
       isEmailPublic: true,
+      status: true, // pending, success
+      emailToken: false, // a hash
       password: false,
     },
   })
   if (!user) {
     return res.status(402).end()
   }
+  if (user.status === 'PENDING') return res.status(402).end()
 
   req.body.user = user
   next()
+}
+
+export async function verifyemail(req: Request, res: Response): Promise<void> {
+  const { emailToken } = req.params
+
+  const user = await prisma.user.findUnique({
+    where: { emailToken: emailToken },
+  })
+
+  if (!user) {
+    res.status(401).send({ message: `User not found` })
+    return
+  }
+
+  try {
+    await prisma.user.update({
+      where: { id: user.id },
+      data: { status: 'APPROVED', emailToken: `${user.id}EmailVerified` },
+    })
+    res.status(201).send({ message: 'Email verified!' })
+  } catch (error) {
+    return res.status(402).end()
+  }
 }

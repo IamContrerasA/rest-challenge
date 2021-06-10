@@ -44,6 +44,13 @@ model User {
   email         String   @unique @db.VarChar(255)
   isEmailPublic Boolean  @default(false)
   password      String   @default("")
+  status        STATUS   @default(PENDING)
+  emailToken    String   @unique
   Post          Post[]
   Comment       Comment[]
+}
+
+enum STATUS {
+  PENDING
+  APPROVED
 }
