@@ -45,7 +45,7 @@ export const signup = async (req: Request, res: Response): Promise<void> => {
 
         if (process.env.NODE_ENV === 'development') {
           console.log(
-            `Go to the next link please: ${process.env.URL}/verify-acount/${user.emailToken} with insomnia or postman because it use method:post`,
+            `Go to the next link please: ${process.env.URL}verify-account/${user.emailToken} with insomnia or postman because it use method:post`,
           )
         }
         if (process.env.NODE_ENV === 'production') {
@@ -54,8 +54,8 @@ export const signup = async (req: Request, res: Response): Promise<void> => {
             to: `${user.email}`, // Change to your recipient
             from: 'iamcontrerasdev@gmail.com', // Change to your verified sender
             subject: 'Verify email please - Iam Assignment',
-            text: `Go to the next link please: ${process.env.URL}/verify-acount/${user.emailToken} with insomnia or postman because it use method:post`,
-            html: `<strong>Go to the next link please: ${process.env.URL}/verify-acount/${user.emailToken} with insomnia or postman because it use method:post</strong>`,
+            text: `Go to the next link please: ${process.env.URL}verify-account/${user.emailToken} with insomnia or postman because it use method:post`,
+            html: `<strong>Go to the next link please: ${process.env.URL}verify-account/${user.emailToken} with insomnia or postman because it use method:post</strong>`,
           }
 
           sgMail
