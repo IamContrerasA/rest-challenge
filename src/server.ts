@@ -4,7 +4,7 @@ import { apiRouter } from './router'
 import { protect, signin, signup, verifyemail, signout } from './utils/auth'
 
 const app = express()
-const PORT = process.env.API_PORT || 3000
+const PORT = process.env.PORT || 3000
 const ENVIROMENT = process.env.NODE_ENV || 'development'
 
 app.use(express.json())
