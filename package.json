@@ -15,7 +15,7 @@
     "prisma:reset": "yarn prisma migrate dev --preview-feature --schema=./src/prisma/schema.prisma",
     "prisma:format": "yarn prisma format --schema=./src/prisma/schema.prisma",
     "prisma:generate": "yarn prisma generate --schema=./src/prisma/schema.prisma",
-    "build": "tsc --build && yarn prisma:generate",
+    "build": "yarn prisma:generate && tsc --build",
     "postinstall": "yarn run build"
   },
   "dependencies": {
