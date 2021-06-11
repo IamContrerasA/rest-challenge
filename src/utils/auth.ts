@@ -2,6 +2,7 @@ import jwt from 'jsonwebtoken'
 import { PrismaClient, User } from '@prisma/client'
 import { Request, Response, NextFunction } from 'express'
 import bcrypt from 'bcrypt'
+import sgMail from '@sendgrid/mail'
 
 export const prisma = new PrismaClient()
 const JWT_SECRET = `${process.env.JWT_SECRET}`
@@ -41,6 +42,32 @@ export const signup = async (req: Request, res: Response): Promise<void> => {
             emailToken: emailToken,
           },
         })
+
+        if (process.env.NODE_ENV === 'development') {
+          console.log(
+            `Go to the next link please: ${process.env.URL}/verify-acount/${user.emailToken} with insomnia or postman because it use method:post`,
+          )
+        }
+        if (process.env.NODE_ENV === 'production') {
+          sgMail.setApiKey(`${process.env.SENDGRID_API_KEY}`)
+          const msg = {
+            to: `${user.email}`, // Change to your recipient
+            from: 'iamcontrerasdev@gmail.com', // Change to your verified sender
+            subject: 'Verify email please - Iam Assignment',
+            text: `Go to the next link please: ${process.env.URL}/verify-acount/${user.emailToken} with insomnia or postman because it use method:post`,
+            html: `<strong>Go to the next link please: ${process.env.URL}/verify-acount/${user.emailToken} with insomnia or postman because it use method:post</strong>`,
+          }
+
+          sgMail
+            .send(msg)
+            .then((response) => {
+              console.log(response[0].statusCode)
+              console.log(response[0].headers)
+            })
+            .catch((error) => {
+              console.error(error)
+            })
+        }
 
         const token = newToken(user)
         res.status(201).send({ token })
