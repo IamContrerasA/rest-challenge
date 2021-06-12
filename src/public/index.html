@@ -1,0 +1,152 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <title>Iam Rest Challenge</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <style>
+      .error {
+        background-color: red;
+        color: white;
+      }
+      .endpoints {
+        display: flex;
+        flex-direction: row;
+      }
+      div {
+        margin: 10px;
+      }
+    </style>
+  </head>
+  <body>
+    <h1>Iam Rest Challenge</h1>
+    The endpoints for the app are:
+
+    <h2>Auth</h2>
+    <span class="error">Please use imnsonia or postman</span>
+    <p>
+      First signup with your email name@ravn.co, then check your email and you
+      have your email token, verify your account and you can use the rest of
+      endpoints. Use the beared token gived in insomnia for example
+    </p>
+    <img src="Untitled1.jpg" width="1400" />
+    <div>POST: https://iamrestchallenge.herokuapp.com/signup</div>
+    <div>POST: https://iamrestchallenge.herokuapp.com/signin</div>
+    <div>
+      POST: https://iamrestchallenge.herokuapp.com/verify-account/[token]
+    </div>
+    <div>POST: https://iamrestchallenge.herokuapp.com/signout</div>
+
+    <h2>App</h2>
+    <p>all end points show in the image</p>
+    <div class="endpoints">
+      <img src="Untitled2.png" height="700px" />
+      <div style="width: 100px"></div>
+      <div>
+        <div>
+          PUT: https://iamrestchallenge.herokuapp.com/posts/1/comments/1/liked
+          ------ like a comment
+        </div>
+        <div>
+          PUT: https://iamrestchallenge.herokuapp.com/posts/1/comments/1/publish
+          ------ publish a comment because is draft in first place
+        </div>
+        <div>
+          DEL: https://iamrestchallenge.herokuapp.com/posts/1/comments/1 ------
+          delete a comment
+        </div>
+        <div>
+          PUT: https://iamrestchallenge.herokuapp.com/posts/1/comments/1 ------
+          update a comment
+        </div>
+        <div>
+          POST: https://iamrestchallenge.herokuapp.com/posts/1/comments ------
+          create a comment for example{ "content": "post7 comment 2" }
+        </div>
+        <div>
+          GET: https://iamrestchallenge.herokuapp.com/posts/1/comments/1 ------
+          get a comment with id
+        </div>
+        <div>
+          GET: https://iamrestchallenge.herokuapp.com/posts/1/comments ------
+          get all comments
+        </div>
+        <div></div>
+        <div>
+          ------------------------------------------------------------------------------------------------------------------------------------------------------------------
+        </div>
+        <div></div>
+        <div>
+          PUT: https://iamrestchallenge.herokuapp.com/posts/1/liked ------ like
+          a post
+        </div>
+        <div>
+          PUT: https://iamrestchallenge.herokuapp.com/posts/1/publish ------
+          publish a post because is draft in first place
+        </div>
+        <div>
+          DEL: https://iamrestchallenge.herokuapp.com/posts/1 ------ delete a
+          post
+        </div>
+        <div>
+          PUT: https://iamrestchallenge.herokuapp.com/posts/ ------ update a
+          post
+        </div>
+        <div>
+          POST: https://iamrestchallenge.herokuapp.com/posts ------ create a
+          post for example { "title": "post title7", "content": "post content7"
+          }
+        </div>
+        <div>
+          GET: https://iamrestchallenge.herokuapp.com/posts/1 ------ get post 1
+        </div>
+        <div>
+          GET: https://iamrestchallenge.herokuapp.com/posts ------ get all posts
+        </div>
+        <div></div>
+        <div>
+          ------------------------------------------------------------------------------------------------------------------------------------------------------------------
+        </div>
+        <div></div>
+        <div>
+          PUT: https://iamrestchallenge.herokuapp.com/accounts/1/publicEmail
+          ------ change isEmailPublic to true
+        </div>
+        <div>
+          PUT: https://iamrestchallenge.herokuapp.com/accounts/1/publicName
+          ------ change isNamePublic to true
+        </div>
+        <div>
+          DEL: https://iamrestchallenge.herokuapp.com/accounts/1 ------ delete a
+          user
+        </div>
+        <div>
+          PUT: https://iamrestchallenge.herokuapp.com/accounts/1 ------ Update a
+          user. For example { "firstname": "Primer noombre", "surname":
+          "Apellido" }
+        </div>
+
+        <div>
+          GET: https://iamrestchallenge.herokuapp.com/accounts/1 ------ Get user
+          1
+        </div>
+        <div>
+          GET: https://iamrestchallenge.herokuapp.com/accounts ------ Get all
+          users
+        </div>
+      </div>
+    </div>
+
+    <h2>Prisma Schema</h2>
+    <p>just in case</p>
+    <div style="display: flex">
+      <img src="Untitled3.png" height="700px" />
+      <img src="Untitled4.png" height="700px" />
+    </div>
+
+    <h2>Source Code</h2>
+    <p>Sorry for the code, I didn't have much time</p>
+    <a href="https://github.com/IamContrerasA/rest-challenge" target="blank"
+      >https://github.com/IamContrerasA/rest-challenge</a
+    >
+  </body>
+</html>

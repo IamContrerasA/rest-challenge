@@ -1,3 +1,4 @@
+import path from 'path'
 import express, { Request, Response, NextFunction } from 'express'
 import cors from 'cors'
 import { apiRouter } from './router'
@@ -24,6 +25,11 @@ function errorHandler(
 }
 
 app.use(cors())
+
+app.get('/', (req: Request, res: Response) => {
+  res.sendFile(path.join(__dirname + '/public/index.html'))
+})
+app.use(express.static(__dirname + '/public'))
 
 app.post('/signup', signup)
 app.post('/verify-account/:emailToken', verifyemail)
